@@ -183,6 +183,11 @@
       showState("Dieser Browser kann das Video leider nicht abspielen.", false);
       return;
     }
+    el.addEventListener("loadedmetadata", () => {
+      if (el.videoWidth && el.videoHeight) {
+        document.querySelector(".player").style.aspectRatio = `${el.videoWidth} / ${el.videoHeight}`;
+      }
+    });
     el.hidden = false;
     $("state").hidden = true;
   }
