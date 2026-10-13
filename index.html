@@ -108,7 +108,7 @@
   button:hover { border-color: var(--muted); }
   body.branded button.primary { background: var(--brand-accent); border-color: var(--brand-accent); color: #fff; }
   footer {
-    justify-content: center; gap: 6px;
+    justify-content: center; gap: 4px;
     padding: 0 16px 28px; color: var(--muted); font-size: 13px;
   }
   footer strong { color: var(--text); font-weight: 600; }
@@ -177,7 +177,7 @@
       hls.loadSource(src);
       hls.attachMedia(el);
       hls.on(Hls.Events.ERROR, (_, data) => {
-        if (data.fatal) showState("Das Video konnte nicht abgespielt werden.", false);
+        if (data.fatal) { el.hidden = true; showState("Das Video konnte nicht abgespielt werden.", false); }
       });
     } else {
       showState("Dieser Browser kann das Video leider nicht abspielen.", false);
