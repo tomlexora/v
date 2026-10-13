@@ -170,15 +170,17 @@
   function play(video) {
     const src = `${SUPABASE_URL}/storage/v1/object/public/videos/${video.id}/playlist.m3u8`;
     const el = $("video");
-    if (el.canPlayType("application/vnd.apple.mpegurl")) {
-      el.src = src;
-    } else if (window.Hls && Hls.isSupported()) {
+    // Prefer hls.js (Media Source Extensions) everywhere it works; native HLS
+    // is only the fallback for browsers without MSE, such as older iPhones.
+    if (window.Hls && Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(src);
       hls.attachMedia(el);
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) { el.hidden = true; showState("Das Video konnte nicht abgespielt werden.", false); }
       });
+    } else if (el.canPlayType("application/vnd.apple.mpegurl")) {
+      el.src = src;
     } else {
       showState("Dieser Browser kann das Video leider nicht abspielen.", false);
       return;
